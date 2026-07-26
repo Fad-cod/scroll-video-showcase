@@ -5,7 +5,7 @@ Transformez n'importe quelle vidéo courte (8-15s) en **site vitrine immersif** 
 > ⚡ **Démo instantanée :** Ouvre [`examples/cocolat/index.html`](examples/cocolat/index.html) dans ton navigateur pour voir le résultat en action !
 > *(La sprite fait 17 Mo, le temps de chargement initial est normal)*
 
-[![Voir le site Cocolat](https://img.shields.io/badge/🍫-Voir%20la%20démo%20Cocolat-8B5E3C?style=for-the-badge)](examples/cocolat/index.html)
+[![Voir la démo](https://img.shields.io/badge/Voir%20la%20démo%20Cocolat-8B5E3C?style=for-the-badge)](examples/cocolat/index.html)
 
 ## ✨ Démo
 
