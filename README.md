@@ -2,7 +2,10 @@
 
 Transformez n'importe quelle vidéo courte (8-15s) en **site vitrine immersif** où l'arrière-plan défile frame par frame synchronisé avec le scroll. Un effet "contrôle vidéo par le scroll" professionnel.
 
-![Demo](examples/cocolat/sprite.jpg)
+> ⚡ **Démo instantanée :** Ouvre [`examples/cocolat/index.html`](examples/cocolat/index.html) dans ton navigateur pour voir le résultat en action !
+> *(La sprite fait 17 Mo, le temps de chargement initial est normal)*
+
+[![Voir le site Cocolat](https://img.shields.io/badge/🍫-Voir%20la%20démo%20Cocolat-8B5E3C?style=for-the-badge)](examples/cocolat/index.html)
 
 ## ✨ Démo
 
@@ -71,6 +74,21 @@ Défilement fluide et professionnel
 
 Consulte le fichier [SKILL.md](SKILL.md) pour la documentation complète de la méthode, les astuces de performance, les anti-patrons à éviter et les workflows avancés (multi-sprites 4K, WebP, vidéos longues).
 
+## 🌟 Visibilité & Partage
+
+Pour que les gens découvrent et utilisent ta skill :
+
+1. **skills.sh** — Ton repo est automatiquement référencé sur [skills.sh](https://skills.sh) si le `name:` dans le YAML frontmatter est valide (il l'est ✅)
+2. **Partage le lien** : `https://github.com/Fad-cod/scroll-video-showcase`
+3. **Communautés** : Partage sur Twitter/X avec `@Fad-cod`, sur Reddit (r/webdev, r/javascript, r/css), Discord dev francophones
+4. **Tag tes repos** : Ajoute des topics sur GitHub ("skill", "agent-skills", "scroll-animation", "canvas", "ffmpeg", "video-to-site") pour que les gens trouvent la skill par recherche
+
+> 💡 **Astuce :** Une petite vidéo de démonstration (Loom, Streamable, ou GIF) postée sur Twitter/X avec le lien du repo est le meilleur moyen de faire connaître ta création !
+
 ## 📄 Licence
 
 MIT — libre d'utiliser, modifier et partager.
+
+---
+
+⭐ **Si tu trouves cette skill utile, n'oublie pas de laisser une star sur GitHub !**
