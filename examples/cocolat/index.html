@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cocolat — Chocolatier d'Exception</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #c9a04d;
+    --gold-light: #e8cf8a;
+    --cream: #faf5ea;
+    --chocobg: #5a3020;
+    --brown: #4a2c1a;
+    --caramel: #7a4a2a;
+  }
+
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--chocobg);
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  #bgCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    display: block;
+    background: var(--chocobg);
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2.5rem;
+    transform: translateY(-100%);
+    transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), background 0.4s ease;
+    background: rgba(13,8,5,0.80);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(201,160,77,0.08);
+    pointer-events: auto;
+  }
+  nav.visible { transform: translateY(0); }
+  nav.scrolled { background: rgba(13,8,5,0.92); }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    cursor: default;
+  }
+  .nav-links {
+    display: flex;
+    gap: 1.8rem;
+    list-style: none;
+    align-items: center;
+  }
+  .nav-links a {
+    color: rgba(250,245,234,0.55);
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    position: relative;
+    padding: 0.2rem 0;
+    cursor: pointer;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    transition: width 0.35s ease;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-links a.active { color: var(--gold-light); }
+
+  .nav-cta {
+    padding: 0.45rem 1.4rem;
+    border: 1px solid rgba(201,160,77,0.25);
+    border-radius: 100px;
+    color: var(--gold-light) !important;
+    transition: all 0.35s ease !important;
+  }
+  .nav-cta:hover {
+    background: rgba(201,160,77,0.1);
+    border-color: var(--gold);
+  }
+  .nav-cta::after { display: none !important; }
+
+  .nav-toggle {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .nav-toggle span {
+    display: block; width: 24px; height: 2px;
+    background: var(--gold-light); border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .scroll-wrap { position: relative; z-index: 1; }
+
+  section {
+    position: relative;
+    height: 120vh;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    scroll-margin-top: 70px;
+  }
+
+  .text-content {
+    max-width: 620px;
+    padding: 2rem 4rem;
+    opacity: 0;
+    will-change: transform, opacity;
+    pointer-events: auto;
+    transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
+  }
+  .text-content.from-left { transform: translateX(-80px); }
+  .text-content.from-right {
+    transform: translateX(80px);
+    margin-left: auto;
+    text-align: right;
+  }
+  .text-content.from-right p, .text-content.from-right .label, .text-content.from-right h2 { text-align: right; }
+  .text-content.from-bottom {
+    transform: translateY(60px);
+    align-self: flex-end;
+    padding-bottom: 12vh;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .text-content.from-bottom h2, .text-content.from-bottom p, .text-content.from-bottom .label { text-align: center; max-width: 100%; }
+  .text-content.from-bottom p { margin: 0.8rem auto 0; }
+  .text-content.visible { opacity: 1; transform: translateX(0) translateY(0); }
+
+  .text-content .label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 0.8rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.50);
+  }
+  .text-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #fff;
+    text-shadow: 0 2px 30px rgba(0,0,0,0.50), 0 0 60px rgba(0,0,0,0.15);
+    letter-spacing: 0.02em;
+  }
+  .text-content h2 .gold {
+    background: linear-gradient(135deg, var(--gold-light), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-content p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(0.95rem, 1.6vw, 1.25rem);
+    font-weight: 400;
+    max-width: 460px;
+    margin-top: 1rem;
+    color: rgba(255,255,255,0.80);
+    text-shadow: 0 2px 20px rgba(0,0,0,0.45);
+    line-height: 1.65;
+  }
+  .text-content .accent-line {
+    margin-top: 0.4rem;
+    width: 36px;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 2px;
+    box-shadow: 0 0 20px rgba(201,160,77,0.2);
+  }
+  .text-content.from-right .accent-line { margin-left: auto; }
+  .text-content.from-bottom .accent-line { margin: 0.4rem auto 0; }
+
+  #progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 101;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    width: 0%;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 10px rgba(201,160,77,0.2);
+  }
+  #counter {
+    position: fixed;
+    bottom: 20px;
+    right: 24px;
+    z-index: 10;
+    font-family: 'Inter', monospace;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.1em;
+    pointer-events: none;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+  }
+
+  .scroll-hint {
+    position: fixed;
+    bottom: 44px;
+    left: 50%; transform: translateX(-50%);
+    z-index: 5;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.30);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: fadeOutScroll 5s ease-out forwards;
+    pointer-events: none;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+  }
+  .scroll-hint .mouse {
+    width: 20px; height: 32px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    position: relative;
+  }
+  .scroll-hint .mouse::after {
+    content: '';
+    position: absolute; top: 5px; left: 50%;
+    transform: translateX(-50%);
+    width: 2px; height: 7px;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: scrollWheel 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollWheel {
+    0%,100%{ opacity:1; transform:translateX(-50%) translateY(0); }
+    50%{ opacity:0.2; transform:translateX(-50%) translateY(12px); }
+  }
+  @keyframes fadeOutScroll {
+    0%,50%{ opacity:1; } 100%{ opacity:0; }
+  }
+
+  #loader {
+    position: fixed; inset: 0; z-index: 999;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 18px;
+    background: var(--chocobg);
+    transition: opacity 0.7s ease, visibility 0.7s ease;
+  }
+  #loader.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+  #loader .logo {
+    font-family:'Playfair Display',serif; font-size:2.4rem; font-weight:700;
+    background: linear-gradient(135deg,var(--gold-light),var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-clip:text; letter-spacing:0.08em;
+  }
+  .loader-track {
+    width: 220px; height: 3px;
+    background: rgba(201,160,77,0.1); border-radius:3px; overflow:hidden;
+  }
+  .loader-fill {
+    height:100%; width:0%;
+    background: linear-gradient(90deg,var(--gold),var(--gold-light));
+    border-radius:3px; transition:width 0.3s ease;
+  }
+  .loader-text {
+    font-family:'Inter',sans-serif; font-size:0.6rem;
+    letter-spacing:0.2em; text-transform:uppercase;
+    color: rgba(255,255,255,0.25);
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 0.7rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+    .nav-links a { font-size: 0.68rem; }
+    .text-content { padding: 2rem 2.5rem; }
+    .text-content h2 { font-size: clamp(2rem, 5vw, 3.2rem); }
+    .text-content p { font-size: clamp(0.9rem, 1.5vw, 1.1rem); }
+  }
+  @media (max-width: 640px) {
+    nav { padding: 0.6rem 1rem; }
+    .nav-logo { font-size: 1.1rem; }
+    .nav-links {
+      position: fixed; top:0; right:-100%; width:100%; height:100dvh;
+      flex-direction: column;
+      background: rgba(13,8,5,0.97);
+      backdrop-filter: blur(24px);
+      justify-content: center; gap: 2.2rem;
+      transition: right 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-links.open { right: 0; }
+    .nav-toggle { display: flex; }
+    .nav-links a { font-size: 0.9rem; letter-spacing: 0.15em; }
+    section { height: 120dvh; padding: 0 1rem; }
+    .text-content {
+      max-width: 100%;
+      padding: 1.25rem;
+      text-align: center !important;
+    }
+    .text-content.from-left { transform: translateX(-40px); }
+    .text-content.from-right { transform: translateX(40px); margin-left: 0; }
+    .text-content.from-bottom { transform: translateY(30px); align-self: center; padding-bottom: 8vh; }
+    .text-content h2 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+    .text-content p { font-size: 0.9rem; max-width: 100%; }
+    .text-content .label { font-size: 0.55rem; }
+    .text-content.from-right p, .text-content.from-right .label, .text-content.from-right h2 { text-align: center !important; }
+    .text-content.from-right .accent-line { margin: 0.4rem auto 0; }
+    .text-content .accent-line { margin: 0.4rem auto 0; }
+    .text-content p span[style*="float:right"] { float: none !important; display: inline !important; margin-left: 0.4rem; }
+    .scroll-hint { display: none; }
+    #counter { display: none; }
+  }
+  @media (max-width: 400px) {
+    .text-content { padding: 1rem; }
+    .text-content h2 { font-size: clamp(1.4rem, 7vw, 1.8rem); }
+    .nav-links a { font-size: 0.8rem; gap: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="loader">
+    <div class="logo">Cocolat</div>
+    <div class="loader-track"><div class="loader-fill" id="loadBar"></div></div>
+    <div class="loader-text"><span id="loadText">Chargement...</span></div>
+  </div>
+
+  <div id="progress"></div>
+  <canvas id="bgCanvas"></canvas>
+
+  <nav id="navbar">
+    <div class="nav-logo">✦ Cocolat</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a data-nav="1">Accueil</a></li>
+      <li><a data-nav="2">Notre Histoire</a></li>
+      <li><a data-nav="3">Grands Crus</a></li>
+      <li><a data-nav="4">Savoir-Faire</a></li>
+      <li><a data-nav="5">Collection</a></li>
+      <li><a data-nav="6">Dégustation</a></li>
+      <li><a data-nav="7" class="nav-cta">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="scroll-wrap">
+    <section id="s1"><div class="text-content from-left" data-section="0">
+      <div class="label">✦ Cocolat — Depuis 1924</div><h2>L'art du chocolat<br><span class="gold">réinventé</span></h2>
+      <div class="accent-line"></div>
+      <p>Chaque création est une promesse d'évasion.<br>Laissez-vous porter par l'excellence du cacao d'exception.<br><br><span style="font-size:0.8rem;letter-spacing:0.15em;opacity:0.6;">✦ Fève à la tablette ✦</span></p>
+    </div></section>
+    <section id="s2"><div class="text-content from-right" data-section="1">
+      <div class="label">Un Héritage d'Excellence</div><h2>Quatre générations<br><span class="gold">d'exigence</span></h2>
+      <div class="accent-line"></div>
+      <p>Depuis 1924, notre famille perpétue un savoir-faire rare dans son atelier parisien.<br>La recherche constante de la perfection, du geste ancestral à l'audace créative.</p>
+    </div></section>
+    <section id="s3"><div class="text-content from-left" data-section="2">
+      <div class="label">Grands Crus d'Exception</div><h2>Du cacao<br><span class="gold">d'exception</span></h2>
+      <div class="accent-line"></div>
+      <p>Madagascar, Venezuela, Équateur — nous parcourons le monde pour nouer des relations uniques avec les planteurs.<br>Des fèves d'exception, cultivées dans le respect des hommes et de la terre.</p>
+    </div></section>
+    <section id="s4"><div class="text-content from-bottom" data-section="3">
+      <div class="label">L'Art de la Transformation</div><h2>La fabrication<br><span class="gold">en héritage</span></h2>
+      <div class="accent-line"></div>
+      <p>Torréfaction lente, conchage traditionnel, tempérage maîtrisé à la perfection.<br>Chaque geste est une promesse — celle d'un chocolat d'une pureté inégalée.</p>
+    </div></section>
+    <section id="s5"><div class="text-content from-left" data-section="4">
+      <div class="label">Nos Créations Signatures</div><h2>La<br><span class="gold">Collection</span></h2>
+      <div class="accent-line"></div>
+      <p>
+        <span style="display:block;font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:0.4rem;">Tablette Grand Cru 85%<span style="float:right;opacity:0.7;">12 €</span></span>
+        <span style="display:block;font-size:0.8rem;opacity:0.6;margin-bottom:0.6rem;">Madagascar — notes fruitées & épicées</span>
+        <span style="display:block;font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:0.4rem;">Praliné Caramel Beurre Salé<span style="float:right;opacity:0.7;">18 €</span></span>
+        <span style="display:block;font-size:0.8rem;opacity:0.6;margin-bottom:0.6rem;">Éclats croquants & caramel onctueux</span>
+        <span style="display:block;font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:0.4rem;">Ganache Vanille Tahiti<span style="float:right;opacity:0.7;">22 €</span></span>
+        <span style="display:block;font-size:0.8rem;opacity:0.6;margin-bottom:0.6rem;">Infusion subtile & longueur en bouche</span>
+        <span style="display:block;font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:0.4rem;">Coffret Découverte 16 p.<span style="float:right;opacity:0.7;">49 €</span></span>
+        <span style="display:block;font-size:0.8rem;opacity:0.6;">L'essentiel de notre savoir-faire</span>
+      </p>
+    </div></section>
+    <section id="s6"><div class="text-content from-right" data-section="5">
+      <div class="label">L'Expérience Sensorielle</div><h2>L'art de la<br><span class="gold">dégustation</span></h2>
+      <div class="accent-line"></div>
+      <p>Attaque franche, notes boisées, finale d'une infinie délicatesse.<br>Fermez les yeux — chaque bouchée est un voyage au cœur des plus nobles fèves de cacao.</p>
+    </div></section>
+    <section id="s7"><div class="text-content from-left" data-section="6">
+      <div class="label">Rejoignez l'Exception</div><h2>Offrez-vous<br><span class="gold">le meilleur</span></h2>
+      <div class="accent-line"></div>
+      <p>Boutique en ligne · Livraison nationale sous 48h<br>Atelier Parisien — Visites et dégustations sur rendez-vous<br><br>
+        <span style="font-family:'Inter',sans-serif;font-size:0.75rem;letter-spacing:0.1em;">cocolat.fr  —  contact@cocolat.fr  —  01 42 XX XX XX</span>
+      </p>
+    </div></section>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="mouse"></div><span>Défiler</span>
+  </div>
+  <div id="counter">—</div>
+
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script>
+    (function() {
+      'use strict';
+
+      // ── SPRITE UNIQUE (qualité max, 192 frames en 12×16) ──
+      const SPRITE = './sprite.jpg';
+      const COLS = 12;
+      const ROWS = 16;
+      const TOTAL = COLS * ROWS; // 192
+
+      // ── DOM ──
+      const c = document.getElementById('bgCanvas'), cx = c.getContext('2d');
+      const pBar = document.getElementById('progress'), counter = document.getElementById('counter');
+      const lBar = document.getElementById('loadBar'), lText = document.getElementById('loadText');
+      const loader = document.getElementById('loader'), navbar = document.getElementById('navbar');
+      const navLinks = document.querySelectorAll('[data-nav]');
+      const navToggle = document.getElementById('navToggle'), navList = document.getElementById('navLinks');
+      const textBlocks = document.querySelectorAll('.text-content');
+
+      // ── Canvas sizing ──
+      function resize() {
+        const d = window.devicePixelRatio || 1, w = innerWidth, h = innerHeight;
+        c.width = w * d; c.height = h * d;
+        c.style.width = w + 'px'; c.style.height = h + 'px';
+        cx.scale(d, d);
+      }
+
+      // ── Load sprite + decode ──
+      const sprite = new Image();
+      let ready = false;
+      let fw = 0, fh = 0;
+
+      sprite.onload = () => {
+        // Wait for actual pixel decode before marking ready (prevents first-draw freeze)
+        sprite.decode().then(() => {
+          fw = sprite.naturalWidth / COLS;
+          fh = sprite.naturalHeight / ROWS;
+          ready = true;
+          lBar.style.width = '100%'; lText.textContent = 'Prêt';
+          resize(); draw(0);
+          setTimeout(() => loader.classList.add('hidden'), 300);
+        }).catch(() => {
+          fw = sprite.naturalWidth / COLS;
+          fh = sprite.naturalHeight / ROWS;
+          ready = true;
+          lBar.style.width = '100%'; lText.textContent = 'Prêt';
+          resize(); draw(0);
+          setTimeout(() => loader.classList.add('hidden'), 300);
+        });
+      };
+      sprite.onerror = () => { ready = true; loader.classList.add('hidden'); };
+      sprite.src = SPRITE;
+
+      // ── Draw frame ──
+      function draw(idx) {
+        if (!ready) return;
+        const col = idx % COLS, row = Math.floor(idx / COLS);
+        cx.clearRect(0, 0, innerWidth, innerHeight);
+        cx.drawImage(sprite, col * fw, row * fh, fw, fh, 0, 0, innerWidth, innerHeight);
+      }
+
+      // ── Frame from scroll ──
+      function update(sy) {
+        if (!ready) return;
+        const dh = document.documentElement.scrollHeight - innerHeight;
+        if (dh <= 0) return;
+        const p = Math.min(1, Math.max(0, sy / dh));
+        const idx = Math.min(TOTAL - 1, Math.round(p * (TOTAL - 1)));
+        draw(idx);
+        const pct = Math.round(p * 100);
+        pBar.style.width = pct + '%'; counter.textContent = String(pct).padStart(2,'0') + '%';
+      }
+
+      // ── Sections ──
+      function secProg() {
+        const s = document.querySelectorAll('section'), dh = document.documentElement.scrollHeight - innerHeight, r = [];
+        s.forEach(x => { const b = x.getBoundingClientRect(), t = b.top + scrollY; r.push({ top: t, center: (t + b.height / 2) / dh }); });
+        return r;
+      }
+
+      // ── Text entrance ──
+      const obs = new IntersectionObserver(e => { e.forEach(x => { if (x.isIntersecting) x.target.classList.add('visible'); }); },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      textBlocks.forEach(b => obs.observe(b));
+
+      // ── Navbar ──
+      function navStick(sy) { navbar.classList.toggle('visible', sy > 60); }
+
+      // ── Nav links ──
+      function navActive() {
+        const secs = secProg(), dh = document.documentElement.scrollHeight - innerHeight;
+        const p = dh > 0 ? Math.min(1, scrollY / dh) : 0;
+        let ai = 0, md = Infinity;
+        secs.forEach((s, i) => { const d = Math.abs(p - s.center); if (d < md) { md = d; ai = i; } });
+        navLinks.forEach(a => a.classList.toggle('active', parseInt(a.dataset.nav) - 1 === ai));
+      }
+
+      // ── Lenis ──
+      const lenis = new Lenis({
+        duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.8, gestureOrientation: 'vertical',
+      });
+      lenis.on('scroll', ({ scroll }) => { update(scroll); navStick(scroll); navActive(); });
+      (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })();
+
+      // ── Clicks ──
+      navLinks.forEach(a => {
+        a.addEventListener('click', () => {
+          const idx = parseInt(a.dataset.nav);
+          if (isNaN(idx)) return;
+          const t = document.querySelector('#s' + idx);
+          if (t) { lenis.scrollTo(t, { offset: 0, duration: 2 }); navList.classList.remove('open'); }
+        });
+      });
+      navToggle.addEventListener('click', () => navList.classList.toggle('open'));
+
+      // ── Resize ──
+      let rt;
+      addEventListener('resize', () => { resize(); clearTimeout(rt); rt = setTimeout(() => update(scrollY || (lenis ? lenis.scroll : 0)), 100); });
+
+      // ── Init ──
+      navStick(0); navActive(); resize();
+    })();
+  </script>
+</body>
+</html>
