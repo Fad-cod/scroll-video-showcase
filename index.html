@@ -144,10 +144,10 @@ body{font-family:'Outfit',sans-serif;overflow-x:hidden;background:#122619;color:
 const COLS = 12, ROWS = 20, TOTAL = 240, SPRITE_SRC = './sprite.jpg';
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
-function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; if(ready) drawFrame(currentIdx); }
+let FW, FH, ready = false, currentIdx = -1;
+function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; if(ready && currentIdx >= 0) drawFrame(currentIdx); }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-let FW, FH, ready = false, currentIdx = -1;
 function drawFrame(idx){
   const col = idx % COLS, row = Math.floor(idx / COLS);
   const cw = canvas.width, ch = canvas.height;
