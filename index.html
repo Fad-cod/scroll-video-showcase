@@ -3,251 +3,520 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jardin des Saveurs — Cotonou</title>
+<title>Jardin des Saveurs — 1 Plat + 1 Boisson · Cotonou</title>
 <meta name="description" content="Jardin des Saveurs : formule 1 plat + 1 boisson, paiement Mobile Money, suivi en direct.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,900;1,9..144,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,600;1,9..144,900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--vert:#1c3a2a;--vert-fonce:#122619;--creme:#faf4e8;--creme-2:#f3e9d4;--terre:#c2602a;--ambre:#e9a13b;--encre:#23281f;--blanc:#fffdf7}
+:root{
+  --vert:#1c3a2a;--vert-fonce:#0f2117;--vert-doux:#2c5540;
+  --creme:#faf4e8;--creme-2:#f2e7d0;
+  --terre:#c2602a;--terre-fonce:#9c4a1e;--ambre:#e9a13b;--ambre-clair:#f6c86e;
+  --encre:#23281f;--blanc:#fffdf7;
+  --ombre:0 24px 70px rgba(15,33,23,.22);
+}
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto}
+html{scroll-behavior:smooth}
 body{font-family:'Outfit',sans-serif;background:var(--creme);color:var(--encre);overflow-x:hidden}
 h1,h2,h3{font-family:'Fraunces',serif}
-.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
-.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600;padding:14px 30px;border-radius:100px;font-size:.96rem;transition:.25s;text-decoration:none}
-.btn-terre{background:linear-gradient(135deg,var(--terre),#9c4a1e);color:#fff;box-shadow:0 10px 26px rgba(194,96,42,.4)}
-.btn-terre:hover{transform:translateY(-2px)}
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(250,244,232,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(28,58,42,.1)}
-.nav-in{max-width:1180px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;gap:26px}
-.logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:900;font-size:1.2rem;color:var(--vert);text-decoration:none}
-.logo-feuille{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#3f7a52,var(--vert));display:grid;place-items:center;color:#fff}
-.nav-links{display:flex;gap:24px;margin-left:auto;font-weight:500;font-size:.92rem}
-.nav-links a{color:inherit;text-decoration:none;opacity:.8}
-.nav-links a:hover{opacity:1;color:var(--terre)}
-/* HERO normal */
-.hero{padding:150px 0 90px;background:radial-gradient(900px 500px at 85% 10%,rgba(233,161,59,.22),transparent 60%),var(--creme)}
-.hero h1{font-size:clamp(2.6rem,5.5vw,4.3rem);line-height:1.03;font-weight:900;color:var(--vert)}
-.hero h1 em{font-style:italic;color:var(--terre)}
-.hero p.lead{font-size:1.12rem;line-height:1.7;opacity:.75;max-width:520px;margin:18px 0 30px}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 26px}
+/* ===== PRELOADER ===== */
+#loader{position:fixed;inset:0;z-index:1000;background:var(--vert-fonce);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .7s,visibility .7s}
+#loader.fini{opacity:0;visibility:hidden}
+#loader .l-logo{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(1.8rem,5vw,3rem);color:#fff}
+#loader .l-logo em{color:var(--ambre);font-style:normal}
+#loader .l-pct{font-family:'Fraunces',serif;font-size:1rem;color:var(--ambre);letter-spacing:.3em}
+#loader .l-bar{width:min(320px,60vw);height:2px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden}
+#loader .l-bar span{display:block;height:100%;width:0;background:var(--ambre)}
+/* ===== NAV ===== */
+nav{position:fixed;top:0;left:0;right:0;z-index:90;transition:.35s;background:transparent}
+nav.scrolled{background:rgba(250,244,232,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(28,58,42,.12);box-shadow:0 8px 30px rgba(15,33,23,.08)}
+.nav-in{max-width:1200px;margin:0 auto;padding:16px 26px;display:flex;align-items:center;gap:26px}
+.logo{display:flex;align-items:center;gap:11px;font-family:'Fraunces',serif;font-weight:900;font-size:1.25rem;color:#fff;transition:.35s}
+nav.scrolled .logo{color:var(--vert)}
+.logo-feuille{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#4b8a60,var(--vert));display:grid;place-items:center;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.nav-links{display:flex;gap:26px;margin-left:auto;font-weight:500;font-size:.93rem}
+.nav-links a{color:#fff;opacity:.85;transition:.25s}
+nav.scrolled .nav-links a{color:var(--encre)}
+.nav-links a:hover{opacity:1;color:var(--ambre)}
+.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:700;padding:13px 28px;border-radius:100px;font-size:.95rem;transition:.25s;text-decoration:none}
+.btn-terre{background:linear-gradient(135deg,var(--terre),var(--terre-fonce));color:#fff;box-shadow:0 10px 28px rgba(194,96,42,.45)}
+.btn-terre:hover{transform:translateY(-2px) scale(1.02)}
+.btn-clair{background:rgba(255,255,255,.14);color:#fff;border:1.5px solid rgba(255,255,255,.5);backdrop-filter:blur(6px)}
+.btn-clair:hover{background:rgba(255,255,255,.25)}
+.panier-btn{position:relative}
+.panier-count{position:absolute;top:-8px;right:-8px;background:var(--ambre);color:var(--vert-fonce);font-size:.72rem;font-weight:800;width:23px;height:23px;border-radius:50%;display:grid;place-items:center;border:2px solid #fff}
+/* ===== HERO DIAPORAMA ===== */
+.hero{position:relative;height:100svh;min-height:620px;overflow:hidden;background:var(--vert-fonce)}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.6s ease}
+.slide.actif{opacity:1}
+.slide img{width:100%;height:100%;object-fit:cover}
+.slide.actif img{animation:kenburns 7s ease-out forwards}
+@keyframes kenburns{from{transform:scale(1.12)}to{transform:scale(1)}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,12,.55) 0%,rgba(10,20,12,.25) 40%,rgba(10,20,12,.78) 100%)}
+.hero-contenu{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 11vh;color:#fff}
+.hero-contenu h1{font-size:clamp(2.7rem,7vw,5.6rem);line-height:1; font-weight:900;text-shadow:0 6px 50px rgba(0,0,0,.5)}
+.hero-contenu h1 .ligne{display:block;overflow:hidden}
+.hero-contenu h1 .ligne span{display:block;transform:translateY(110%);animation:monte .9s cubic-bezier(.2,.8,.2,1) forwards}
+.hero-contenu h1 .ligne:nth-child(2) span{animation-delay:.15s}
+.hero-contenu h1 .ligne:nth-child(3) span{animation-delay:.3s}
+@keyframes monte{to{transform:none}}
+.hero-contenu h1 em{font-style:italic;color:var(--ambre-clair)}
+.hero-contenu p{margin:20px 0 30px;font-size:1.1rem;color:rgba(255,255,255,.88);max-width:540px;line-height:1.7}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
-/* CHAPITRE VIDEO épinglé */
-.chapitre{position:relative;height:380vh;background:#0a140d}
-.sticky{position:sticky;top:0;height:100vh;overflow:hidden}
-.sticky video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.sticky .voile{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,14,10,.5),rgba(8,14,10,.1) 40%,rgba(8,14,10,.6))}
-.beat{position:absolute;inset:0;display:flex;align-items:center;padding:0 8vw;opacity:0;transition:opacity .35s linear;pointer-events:none}
-.beat .carte{max-width:520px;background:rgba(8,14,10,.55);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:2.2rem 2.4rem;color:#fff}
-.beat.droite{justify-content:flex-end}
-.beat .badge{display:inline-block;padding:.4rem 1.2rem;border-radius:50px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;background:rgba(233,161,59,.18);color:#e9a13b;border:1px solid rgba(233,161,59,.4)}
-.beat h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin-bottom:.8rem}
-.beat p{line-height:1.75;color:rgba(255,255,255,.82)}
-.chap-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.75);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;transition:opacity .3s}
-.titre-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 24px;pointer-events:none;transition:opacity .3s}
-.titre-overlay h1{font-family:'Fraunces',serif;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;color:#fff;line-height:1.02;text-shadow:0 6px 50px rgba(0,0,0,.6)}
-.titre-overlay h1 em{font-style:italic;color:#e9a13b}
-.titre-overlay p{margin-top:14px;color:rgba(255,255,255,.85);font-size:1.05rem;max-width:520px}
-.titre-overlay .scroll-hint{margin-top:26px;display:flex;align-items:center;gap:.8rem;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.8)}
-.titre-overlay .souris{width:24px;height:38px;border:2px solid rgba(255,255,255,.7);border-radius:14px;position:relative}
-.titre-overlay .souris::after{content:"";position:absolute;top:7px;left:50%;width:4px;height:8px;margin-left:-2px;border-radius:4px;background:#e9a13b;animation:roule 1.6s infinite}
+.hero-dots{position:absolute;z-index:3;bottom:34px;right:5vw;display:flex;gap:10px}
+.hero-dots button{width:34px;height:4px;border:none;border-radius:4px;background:rgba(255,255,255,.3);cursor:pointer;transition:.3s;padding:0}
+.hero-dots button.actif{background:var(--ambre)}
+.hero-defile{position:absolute;z-index:3;bottom:30px;left:5vw;color:rgba(255,255,255,.75);font-size:.78rem;letter-spacing:.25em;text-transform:uppercase;display:flex;align-items:center;gap:12px}
+.hero-defile .souris{width:22px;height:36px;border:2px solid rgba(255,255,255,.6);border-radius:13px;position:relative}
+.hero-defile .souris::after{content:"";position:absolute;top:6px;left:50%;width:4px;height:8px;margin-left:-2px;border-radius:4px;background:var(--ambre);animation:roule 1.6s infinite}
 @keyframes roule{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(12px)}}
-.grille-avis{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.avis{background:#fff;border-radius:20px;padding:30px 28px;box-shadow:0 8px 30px rgba(18,38,25,.07)}
-.avis .etoiles{color:var(--ambre);letter-spacing:3px;margin-bottom:12px}
-.avis p{font-style:italic;line-height:1.7;font-size:.95rem}
-.avis .qui{margin-top:16px;font-weight:700;color:var(--vert)}
-.avis .qui span{display:block;font-weight:400;font-size:.82rem;opacity:.6}
-#avisite{background:var(--creme-2)}
-section.bloc{padding:90px 0}
-/* Sections normales */
-section.bloc{padding:90px 0}
-.titre{text-align:center;max-width:640px;margin:0 auto 50px}
-.titre .num{font-family:'Fraunces',serif;color:var(--terre);font-weight:700;letter-spacing:.2em;font-size:.85rem;text-transform:uppercase}
-.titre h2{font-size:clamp(1.9rem,4vw,2.8rem);color:var(--vert);margin:12px 0 14px;font-weight:900}
-.titre p{opacity:.7;line-height:1.7}
-.cartes3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.carte3{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 30px rgba(18,38,25,.08)}
-.carte3 .photo{height:190px;overflow:hidden;background:var(--creme-2)}
-.carte3 .photo img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.carte3:hover .photo img{transform:scale(1.06)}
-.carte3 .icone,.carte3 h3,.carte3 p,.carte3 .prix{margin-left:30px;margin-right:30px}
-.carte3 .icone{margin-top:22px}
-.carte3 .prix{margin-bottom:30px}
-.galerie{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.galerie div{border-radius:18px;overflow:hidden;height:230px;box-shadow:0 8px 26px rgba(18,38,25,.12)}
-.galerie img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.galerie div:hover img{transform:scale(1.07)}
-@media(max-width:860px){ .galerie{grid-template-columns:repeat(2,1fr)} }
-.carte3 .icone{font-size:2rem}
-.carte3 h3{color:var(--vert);font-size:1.25rem;margin:12px 0 8px}
-.carte3 p{font-size:.94rem;opacity:.7;line-height:1.65}
-.carte3 .prix{font-family:'Fraunces',serif;color:var(--terre);font-weight:700;font-size:1.15rem;display:block;margin-top:12px}
-.bandeau-momo{background:var(--vert);color:#fff;border-radius:30px;padding:60px;display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;margin:0 18px}
-.bandeau-momo h2{font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:900;margin-bottom:12px}
-.bandeau-momo h2 em{color:var(--ambre);font-style:italic}
-.bandeau-momo ol{margin:22px 0 0 20px;line-height:2.1;font-size:.96rem;color:rgba(255,255,255,.85)}
-.sms{background:#fff;color:var(--encre);border-radius:16px;padding:16px 18px;margin-top:14px;font-size:.9rem;line-height:1.6}
+/* ===== MARQUEE ===== */
+.bandeau{background:var(--ambre);color:var(--vert-fonce);overflow:hidden;padding:14px 0;transform:rotate(-1.2deg) scale(1.03);box-shadow:0 14px 40px rgba(233,161,59,.35);position:relative;z-index:5}
+.bandeau .defile{display:flex;gap:52px;white-space:nowrap;font-weight:800;letter-spacing:.1em;font-size:.92rem;animation:defile 24s linear infinite;width:max-content}
+@keyframes defile{to{transform:translateX(-50%)}}
+/* ===== STATS ===== */
+.stats{background:var(--vert-fonce);color:#fff;margin-top:-30px;padding:90px 0 70px;position:relative}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.stat b{font-family:'Fraunces',serif;font-size:clamp(2rem,4vw,3rem);color:var(--ambre);display:block}
+.stat span{font-size:.88rem;color:rgba(255,255,255,.65)}
+/* ===== SECTIONS ===== */
+section.bloc{padding:100px 0}
+.titre{text-align:center;max-width:660px;margin:0 auto 54px}
+.titre .num{font-family:'Fraunces',serif;color:var(--terre);font-weight:700;letter-spacing:.22em;font-size:.85rem;text-transform:uppercase}
+.titre h2{font-size:clamp(2rem,4.5vw,3rem);color:var(--vert);margin:14px 0;font-weight:900}
+.titre p{opacity:.7;line-height:1.75}
+/* ===== SIGNATURES (rangée snap) ===== */
+.signatures{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 5vw 30px;scrollbar-width:none}
+.signatures::-webkit-scrollbar{display:none}
+.signat{min-width:min(400px,82vw);scroll-snap-align:center;border-radius:24px;overflow:hidden;position:relative;height:480px;box-shadow:var(--ombre);flex-shrink:0}
+.signat img{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+.signat:hover img{transform:scale(1.07)}
+.signat .legende{position:absolute;inset:auto 0 0 0;padding:28px;background:linear-gradient(transparent,rgba(8,16,11,.88));color:#fff}
+.signat .legende .cat{font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--ambre-clair)}
+.signat .legende h3{font-size:1.6rem;margin:6px 0}
+.signat .legende .prix{font-weight:800;color:var(--ambre)}
+/* ===== FORMULE ===== */
+#formule{background:var(--vert-fonce);border-radius:38px;margin:0 16px;color:#fff;position:relative;overflow:hidden}
+#formule::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 320px at 90% 0%,rgba(233,161,59,.22),transparent 60%),radial-gradient(520px 320px at 0% 100%,rgba(63,122,82,.35),transparent 60%);pointer-events:none}
+.filtres{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:42px;position:relative}
+.filtre{border:1.5px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:11px 26px;border-radius:100px;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600;font-size:.9rem;transition:.25s}
+.filtre.actif{background:var(--ambre);border-color:var(--ambre);color:var(--vert-fonce)}
+.grille-menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:22px;position:relative}
+.carte{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:20px;overflow:hidden;transition:.3s}
+.carte:hover{transform:translateY(-7px);border-color:rgba(233,161,59,.65);box-shadow:0 22px 50px rgba(0,0,0,.35)}
+.carte .photo{height:175px;background:linear-gradient(135deg,#3f7a52,#c2602a);position:relative;overflow:hidden}
+.carte .photo img{width:100%;height:100%;object-fit:cover}
+.carte .photo img{transition:transform .6s}
+.carte:hover .photo img{transform:scale(1.08)}
+.carte .prix{position:absolute;bottom:12px;right:12px;background:var(--ambre);color:var(--vert-fonce);font-weight:800;padding:6px 15px;border-radius:100px;font-size:.9rem}
+.carte .rupture{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.65);color:#fff;font-size:.75rem;font-weight:600;padding:6px 14px;border-radius:100px}
+.carte .corps{padding:18px 20px 22px}
+.carte .cat{font-size:.72rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--ambre)}
+.carte h3{font-size:1.15rem;margin:7px 0 6px}
+.carte p{font-size:.86rem;opacity:.65;line-height:1.55;min-height:40px}
+.carte button{margin-top:14px;width:100%;padding:12px;border-radius:12px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:700;font-size:.9rem;transition:.25s}
+.btn-choisir{background:var(--ambre);color:var(--vert-fonce)}
+.btn-choisir:hover{background:#f5b654}
+.btn-choisi{background:#3fa34d;color:#fff}
+.carte.epuisee{opacity:.55}
+.carte.epuisee button{background:rgba(255,255,255,.15);color:rgba(255,255,255,.6);cursor:not-allowed}
+/* ===== MOMO ===== */
+.bandeau-momo{background:linear-gradient(135deg,var(--vert),var(--vert-doux));color:#fff;border-radius:32px;padding:64px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin:0 16px;box-shadow:var(--ombre);position:relative;overflow:hidden}
+.bandeau-momo::after{content:"";position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(233,161,59,.3),transparent 70%);top:-110px;right:-110px}
+.bandeau-momo h2{font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:900;margin-bottom:10px}
+.bandeau-momo h2 em{color:var(--ambre-clair);font-style:italic}
+.bandeau-momo ol{margin:22px 0 0 20px;line-height:2.2;font-size:.97rem;color:rgba(255,255,255,.88)}
+.sms{background:#fff;color:var(--encre);border-radius:16px;padding:16px 18px;margin-top:14px;font-size:.9rem;line-height:1.6;box-shadow:0 14px 34px rgba(0,0,0,.25);animation:flotte 5s ease-in-out infinite}
 .sms b{color:var(--terre)}
-footer{background:var(--vert-fonce);color:#fff;padding:60px 0 28px;margin-top:90px;border-radius:34px 34px 0 0}
-.foot-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:36px}
-.foot-grid h4{font-family:'Fraunces',serif;color:var(--ambre);margin-bottom:12px}
+@keyframes flotte{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+/* ===== AVIS SLIDER ===== */
+#avisite{background:var(--creme-2)}
+.slider{position:relative;max-width:720px;margin:0 auto;text-align:center;min-height:250px}
+.slide-avis{position:absolute;inset:0;opacity:0;transform:translateY(16px);transition:.6s;pointer-events:none}
+.slide-avis.actif{opacity:1;transform:none;pointer-events:auto;position:relative}
+.slide-avis .etoiles{color:var(--terre);letter-spacing:4px;font-size:1.2rem;margin-bottom:16px}
+.slide-avis p{font-family:'Fraunces',serif;font-style:italic;font-size:clamp(1.15rem,2.5vw,1.5rem);line-height:1.6;color:var(--vert)}
+.slide-avis .qui{margin-top:18px;font-weight:700}
+.slide-avis .qui span{display:block;font-weight:400;font-size:.85rem;opacity:.6}
+.slider-dots{display:flex;gap:10px;justify-content:center;margin-top:26px}
+.slider-dots button{width:10px;height:10px;border-radius:50%;border:none;background:rgba(28,58,42,.2);cursor:pointer;transition:.3s;padding:0}
+.slider-dots button.actif{background:var(--terre);transform:scale(1.3)}
+/* ===== FAQ ===== */
+.faq{max-width:760px;margin:0 auto}
+.faq-item{background:#fff;border-radius:16px;margin-bottom:14px;overflow:hidden;box-shadow:0 6px 22px rgba(18,38,25,.06)}
+.faq-q{width:100%;background:none;border:none;text-align:left;padding:20px 24px;font-family:'Outfit',sans-serif;font-weight:700;font-size:1rem;color:var(--vert);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.faq-q span{font-size:1.4rem;color:var(--terre);transition:.3s;flex-shrink:0}
+.faq-item.ouvert .faq-q span{transform:rotate(45deg)}
+.faq-r{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.faq-r p{padding:0 24px 22px;line-height:1.7;font-size:.94rem;opacity:.75}
+/* ===== FOOTER ===== */
+footer{background:var(--vert-fonce);color:#fff;padding:70px 0 28px;border-radius:36px 36px 0 0}
+.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:36px}
+.foot-grid h4{font-family:'Fraunces',serif;color:var(--ambre);margin-bottom:14px;font-size:1.1rem}
 .foot-grid p,.foot-grid li{font-size:.9rem;opacity:.72;line-height:2;list-style:none}
-.copy{margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);text-align:center;font-size:.82rem;opacity:.5}
-.reveal{opacity:0;transform:translateY(34px);transition:.7s cubic-bezier(.2,.7,.3,1)}
+.copy{margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);text-align:center;font-size:.82rem;opacity:.5}
+/* ===== BARRE + MODAL + TOAST ===== */
+.barre-formule{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(160%);z-index:80;background:var(--vert-fonce);color:#fff;border-radius:20px;padding:15px 18px 15px 24px;display:flex;align-items:center;gap:20px;box-shadow:0 24px 70px rgba(0,0,0,.5);transition:.45s cubic-bezier(.2,.9,.3,1.2);max-width:94vw;border:1px solid rgba(233,161,59,.45)}
+.barre-formule.visible{transform:translateX(-50%) translateY(0)}
+.barre-formule .choix{font-size:.86rem;line-height:1.55}
+.barre-formule .choix b{color:var(--ambre)}
+.barre-formule .total{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:900;white-space:nowrap}
+.modal-fond{position:fixed;inset:0;background:rgba(15,33,23,.7);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-fond.ouvert{display:flex}
+.modal{background:var(--blanc);border-radius:26px;max-width:520px;width:100%;max-height:92vh;overflow-y:auto;padding:38px 36px;position:relative;animation:pop .35s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{transform:scale(.9) translateY(24px);opacity:0}}
+.modal .fermer{position:absolute;top:16px;right:18px;background:none;border:none;font-size:1.5rem;cursor:pointer;opacity:.5}
+.modal h3{font-size:1.6rem;color:var(--vert);margin-bottom:6px}
+.modal .sous{font-size:.9rem;opacity:.65;margin-bottom:22px}
+.champ{margin-bottom:15px}
+.champ label{display:block;font-size:.83rem;font-weight:600;margin-bottom:7px;color:var(--vert)}
+.champ input,.champ select{width:100%;padding:13px 16px;border-radius:13px;border:1.5px solid rgba(28,58,42,.2);font-family:'Outfit',sans-serif;font-size:.95rem;background:#fff}
+.champ input:focus,.champ select:focus{outline:none;border-color:var(--terre)}
+.recap{background:#e7efe4;border-radius:15px;padding:17px 20px;margin-bottom:20px;font-size:.92rem;line-height:1.9}
+.recap b{color:var(--vert)}
+.timeline{margin:8px 0 20px}
+.timeline .step{display:flex;gap:14px;align-items:center;padding:11px 0;opacity:.35;transition:.4s}
+.timeline .step.actif{opacity:1}
+.timeline .step.termine{opacity:1}
+.timeline .rond{min-width:34px;height:34px;border-radius:50%;background:#ddd;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.timeline .step.actif .rond{background:var(--ambre);color:var(--vert-fonce);animation:pulse2 1.2s infinite}
+.timeline .step.termine .rond{background:#3fa34d;color:#fff}
+@keyframes pulse2{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.code-cmd{text-align:center;background:var(--vert);color:#fff;border-radius:15px;padding:18px;margin-bottom:18px}
+.code-cmd b{font-family:'Fraunces',serif;font-size:1.8rem;letter-spacing:.1em;display:block}
+.toast{position:fixed;top:86px;left:50%;transform:translateX(-50%) translateY(-30px);background:var(--vert-fonce);color:#fff;padding:14px 28px;border-radius:100px;z-index:300;opacity:0;transition:.3s;font-weight:500;box-shadow:var(--ombre);max-width:92vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.reveal{opacity:0;transform:translateY(36px);transition:.7s cubic-bezier(.2,.7,.3,1)}
 .reveal.visible{opacity:1;transform:none}
-@media(max-width:860px){
+@media(max-width:920px){
   .nav-links{display:none}
-  .cartes3,.bandeau-momo{grid-template-columns:1fr}
-  .bandeau-momo{padding:40px 26px}
-  .beat{padding:0 6vw}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:28px}
+  .bandeau-momo{grid-template-columns:1fr;padding:42px 26px}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .barre-formule{flex-wrap:wrap;justify-content:center;text-align:center;gap:12px}
+  #formule{margin:0 8px}
 }
+@media(max-width:600px){.foot-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<nav><div class="nav-in">
+<div id="loader"><div class="l-logo">Jardin <em>des Saveurs</em></div><div class="l-bar"><span id="lFill"></span></div><div class="l-pct" id="lPct">0%</div></div>
+
+<nav id="nav"><div class="nav-in">
   <a class="logo" href="#"><span class="logo-feuille">❦</span> Jardin des Saveurs</a>
   <div class="nav-links">
-    <a href="#soiree">La soirée</a><a href="#formule">Formule</a><a href="#momo">MoMo</a>
-    <a href="https://github.com/Fad-cod/restaurant/blob/main/vitrine/index.html" target="_blank" rel="noopener" class="btn btn-terre" style="padding:10px 22px">Commander</a>
+    <a href="#signatures">Signatures</a><a href="#formule">Formule</a><a href="#momo">MoMo</a><a href="#avisite">Avis</a>
+    <button class="btn btn-terre panier-btn" onclick="ouvrirPanier()" style="margin-left:8px">Commander <span class="panier-count" id="panierCount">0</span></button>
   </div>
 </div></nav>
 
-<!-- LA VIDÉO D'ABORD : plein écran dès l'arrivée -->
-<div class="chapitre" id="soiree"><div class="sticky">
-  <video id="v" muted playsinline preload="auto" poster="./poster.jpg" src="./soiree-scrub.mp4"></video>
-  <div class="voile"></div>
-  <div class="chap-hint" id="chapHint">Scrollez pour défiler</div>
+<header class="hero" id="hero">
+  <div class="slide actif"><img src="./img-15.jpg" alt="Apéritif au Jardin des Saveurs"></div>
+  <div class="slide"><img src="./img-80.jpg" alt="Plats partagés entre amis"></div>
+  <div class="slide"><img src="./img-150.jpg" alt="Dîner animé"></div>
+  <div class="slide"><img src="./img-215.jpg" alt="Toast au Jardin"></div>
+  <div class="hero-contenu"><div class="wrap" style="width:100%">
+    <h1><span class="ligne"><span>Le goût du jardin,</span></span><span class="ligne"><span><em>servi en 15 minutes.</em></span></span></h1>
+    <p>Formule <b>1 plat + 1 boisson</b>, paiement Mobile Money, suivi en direct jusqu'en cuisine. Hier soir, c'était ça :</p>
+    <div class="hero-cta">
+      <button class="btn btn-terre" onclick="document.getElementById('formule').scrollIntoView({behavior:'smooth'})">Composer ma formule →</button>
+      <button class="btn btn-clair" onclick="document.getElementById('momo').scrollIntoView({behavior:'smooth'})">Paiement MoMo ?</button>
+    </div>
+  </div></div>
+  <div class="hero-defile"><span class="souris"></span> Défiler</div>
+  <div class="hero-dots" id="heroDots"></div>
+</header>
+
+<div class="bandeau"><div class="defile" id="defile">
+  <span>✦ POULET BRAISÉ</span><span>✦ NDOLÉ AUX CREVETTES</span><span>✦ ERU & WATER FUFU</span><span>✦ SOYA DE BŒUF</span><span>✦ BISSAP MAISON</span><span>✦ 1 PLAT + 1 BOISSON</span>
 </div></div>
 
-<section class="bloc" id="formule"><div class="wrap">
-  <div class="titre reveal"><div class="num">La formule</div><h2>1 plat + 1 boisson, toujours</h2>
-  <p>Le total se calcule tout seul. Ruptures de stock signalées en direct.</p></div>
-  <div class="cartes3">
-    <div class="carte3 reveal"><div class="photo"><img src="./img-80.jpg" alt="Plat signature" loading="lazy"></div><div class="icone">🍃</div><h3>Poulet Braisé & Alloco</h3><p>Le best-seller : poulet braisé, alloco doré, piment doux.</p><span class="prix">3 500 FCFA + boisson</span></div>
-    <div class="carte3 reveal"><div class="photo"><img src="./img-150.jpg" alt="Ndolé aux crevettes" loading="lazy"></div><div class="icone">🍤</div><h3>Ndolé aux crevettes</h3><p>Ndolé onctueux, crevettes, plantains mûrs.</p><span class="prix">4 000 FCFA + boisson</span></div>
-    <div class="carte3 reveal"><div class="photo"><img src="./img-215.jpg" alt="Soya grillé" loading="lazy"></div><div class="icone">🔥</div><h3>Soya de bœuf + bâton</h3><p>Soya grillé au feu, bâton de manioc.</p><span class="prix">2 500 FCFA + boisson</span></div>
+<div class="stats"><div class="wrap stats-grid">
+  <div class="stat reveal"><b><span class="compte" data-cible="15">0</span> min</b><span>préparation moyenne</span></div>
+  <div class="stat reveal"><b><span class="compte" data-cible="49" data-div="10">0</span>/5</b><span>note moyenne avis</span></div>
+  <div class="stat reveal"><b><span class="compte" data-cible="2300">0</span>+</b><span>commandes servies</span></div>
+  <div class="stat reveal"><b><span class="compte" data-cible="10">0</span></b><span>plats & boissons</span></div>
+</div></div>
+
+<section class="bloc" id="signatures"><div class="titre reveal" style="padding:0 26px">
+  <div class="num">Plats signatures</div><h2>Faites glisser, salivez</h2>
+  <p>Nos quatre plats cultes, servis chaque jour. Le reste de la carte vous attend dans la formule.</p>
+</div><div class="signatures" id="signRow"></div></section>
+
+<section class="bloc" id="formule" style="padding:70px 0"><div class="wrap" style="position:relative">
+  <div class="titre reveal"><div class="num" style="color:var(--ambre)">La carte</div>
+  <h2 style="color:#fff">Compose ta formule</h2>
+  <p style="color:rgba(255,255,255,.7)">1 plat obligatoire + 1 boisson obligatoire. Clique, le total suit.</p></div>
+  <div class="filtres reveal">
+    <button class="filtre actif" onclick="filtrer('tout',this)">Tout</button>
+    <button class="filtre" onclick="filtrer('plat',this)">Plats</button>
+    <button class="filtre" onclick="filtrer('eau',this)">Eaux</button>
+    <button class="filtre" onclick="filtrer('biere',this)">Bières</button>
+    <button class="filtre" onclick="filtrer('soda',this)">Sodas</button>
   </div>
-  <div style="text-align:center;margin-top:36px"><a class="btn btn-terre" href="https://github.com/Fad-cod/restaurant/blob/main/vitrine/index.html" target="_blank" rel="noopener">Composer ma formule →</a></div>
+  <div class="grille-menu" id="grilleMenu"></div>
 </div></section>
 
-<section id="momo"><div class="wrap"><div class="bandeau-momo reveal">
+<section class="bloc" id="momo"><div class="wrap"><div class="bandeau-momo reveal">
   <div><h2>Paie comme <em>d'habitude.</em></h2>
-    <p style="color:rgba(255,255,255,.75);line-height:1.7">Pas de carte, pas de compte. Ton téléphone suffit.</p>
-    <ol><li>Envoie le montant exact au numéro du resto</li><li>Recopie la référence du SMS reçu</li><li>La cuisine est alertée instantanément</li></ol></div>
-  <div><div class="sms">Tu as envoyé <b>3 100 FCFA</b> au <b>699 00 00 00</b>. Réf : <b>MP-8X4K2Q</b>.</div>
+  <p style="color:rgba(255,255,255,.75);line-height:1.7">Pas de carte bancaire, pas de compte. Ton téléphone suffit.</p>
+  <ol><li>Envoie le montant exact au <b>699 00 00 00</b></li><li>Recopie la référence du SMS reçu</li><li>La cuisine est alertée à la seconde</li></ol></div>
+  <div><div class="sms">Tu as envoyé <b>3 100 FCFA</b> au <b>699 00 00 00</b> (Jardin des Saveurs). Réf : <b>MP-8X4K2Q</b>.</div>
   <div class="sms">✅ Commande <b>CMD-104</b> validée ! En cuisine — 15 min.</div></div>
 </div></div></section>
 
-<section class="bloc" id="galerie" style="padding-top:0"><div class="wrap">
-  <div class="titre reveal"><div class="num">En images</div><h2>Hier soir au Jardin</h2>
-  <p>Des images tirées de notre soirée — la vraie ambiance, sans filtre.</p></div>
-  <div class="galerie">
-    <div class="reveal"><img src="./img-15.jpg" alt="Apéritif entre amis" loading="lazy"></div>
-    <div class="reveal"><img src="./img-80.jpg" alt="Plats partagés" loading="lazy"></div>
-    <div class="reveal"><img src="./img-150.jpg" alt="Dîner animé" loading="lazy"></div>
-    <div class="reveal"><img src="./img-215.jpg" alt="Santé !" loading="lazy"></div>
+<section class="bloc" id="avisite"><div class="wrap">
+  <div class="titre reveal"><div class="num">Ils en parlent</div><h2>Le quartier a tranché</h2></div>
+  <div class="slider reveal" id="slider">
+    <div class="slide-avis actif"><div class="etoiles">★★★★★</div><p>« Le Ndolé + Bissap, commandé à 12h40, prêt à 13h. Le suivi en direct c'est génial. »</p><div class="qui">Awa M.<span>Cliente · Akwa</span></div></div>
+    <div class="slide-avis"><div class="etoiles">★★★★★</div><p>« Paiement MoMo en 30 secondes, pas de monnaie. La formule est parfaite pour le midi. »</p><div class="qui">Junior T.<span>Client · Deïdo</span></div></div>
+    <div class="slide-avis"><div class="etoiles">★★★★★</div><p>« Enfin un resto où on voit où en est sa commande. Le soya est une tuerie. »</p><div class="qui">Sandra K.<span>Cliente · Bonanjo</span></div></div>
+    <div class="slider-dots" id="sliderDots"></div>
   </div>
 </div></section>
 
-<section class="bloc" id="avisite" style="padding-top:0"><div class="wrap">
-  <div class="titre reveal"><div class="num">Ils en parlent</div><h2>Le quartier a tranché</h2></div>
-  <div class="grille-avis">
-    <div class="avis reveal"><div class="etoiles">★★★★★</div><p>« Le Ndolé aux crevettes + Bissap, commandé à 12h40, prêt à 13h. Le suivi en direct c'est génial. »</p><div class="qui">Awa M.<span>Cliente · Akwa</span></div></div>
-    <div class="avis reveal"><div class="etoiles">★★★★★</div><p>« Paiement MoMo en 30 secondes, pas besoin de monnaie. La formule est parfaite pour le midi. »</p><div class="qui">Junior T.<span>Client · Deïdo</span></div></div>
-    <div class="avis reveal"><div class="etoiles">★★★★★</div><p>« Enfin un resto où on voit où en est sa commande. Le soya est une tuerie. »</p><div class="qui">Sandra K.<span>Cliente · Bonanjo</span></div></div>
+<section class="bloc" id="faq" style="padding-top:0"><div class="wrap">
+  <div class="titre reveal"><div class="num">Questions</div><h2>On te dit tout</h2></div>
+  <div class="faq reveal">
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Comment paie-t-on ?<span>+</span></button><div class="faq-r"><p>Par Mobile Money (MTN / Orange). Tu envoies le montant exact au numéro du resto, puis tu tapes la référence du SMS dans le site. Le gérant vérifie et lance ta commande.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Que contient la formule ?<span>+</span></button><div class="faq-r"><p>Toujours 1 plat + 1 boisson (eau, bière ou soda). Le montant total est la somme exacte des deux prix affichés.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Et si mon paiement est rejeté ?<span>+</span></button><div class="faq-r"><p>Tu vois « Paiement rejeté » dans ton suivi. Vérifie le montant et la référence, puis recommence — rien n'est débité deux fois.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Livrez-vous ?<span>+</span></button><div class="faq-r"><p>Oui : sur place (avec N° de table), à emporter ou en livraison avec ton adresse. Ouvert 11h – 23h, 7j/7.</p></div></div>
   </div>
 </div></section>
 
 <footer><div class="wrap">
   <div class="foot-grid">
     <div><a class="logo" href="#" style="color:#fff"><span class="logo-feuille">❦</span> Jardin des Saveurs</a>
-    <p style="margin-top:12px">Cuisine généreuse, formule 1+1, MoMo et suivi live.</p></div>
-    <div><h4>Horaires</h4><ul><li>Lun – Sam : 11h – 23h</li><li>Dimanche : 12h – 22h</li></ul></div>
-    <div><h4>Contact</h4><ul><li>Akwa, Douala — Cotonou</li><li>699 00 00 00 (MoMo & appels)</li></ul></div>
+    <p style="margin-top:12px">Cuisine généreuse, formule 1+1, MoMo et suivi live. Cotonou, Bénin.</p></div>
+    <div><h4>Horaires</h4><ul><li>Lun – Sam : 11h – 23h</li><li>Dimanche : 12h – 22h</li><li>Service continu</li></ul></div>
+    <div><h4>Contact</h4><ul><li>Akwa, Douala — Cotonou</li><li>699 00 00 00</li><li>bonjour@jardin-saveurs.cm</li></ul></div>
+    <div><h4>Commander</h4><ul><li>Sur place · Emporter</li><li>Livraison</li><li>Paiement MoMo</li></ul></div>
   </div>
-  <div class="copy">© 2026 Jardin des Saveurs — Chapitre vidéo : survolez, la soirée défile.</div>
+  <div class="copy">© 2026 Jardin des Saveurs — Fait avec soin</div>
 </div></footer>
 
-<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<div class="barre-formule" id="barreFormule">
+  <div class="choix" id="barreChoix"></div>
+  <div class="total" id="barreTotal"></div>
+  <button class="btn btn-terre" onclick="ouvrirPanier()">Commander →</button>
+</div>
+<div class="modal-fond" id="modalFond"><div class="modal" id="modalContenu"></div></div>
+<div class="toast" id="toast"></div>
+
 <script>
-/* Lenis = bonus. Sans lui (hors-ligne), scroll natif + tout marche quand même. */
-let lenis = null;
-try {
-  if (window.Lenis) {
-    lenis = new Lenis({ duration: 1.15, smoothWheel: true });
-    const rafL = (t)=>{ lenis.raf(t); requestAnimationFrame(rafL); };
-    requestAnimationFrame(rafL);
-  }
-} catch(e){ lenis = null; }
-function defilerVers(el){
-  if(lenis){ lenis.scrollTo(el, {offset:-70}); }
-  else { el.scrollIntoView({behavior:'smooth'}); }
-}
-const video = document.getElementById('v');
-const chapitre = document.querySelector('.chapitre');
-const beats = document.querySelectorAll('.beat');
-const hint = document.getElementById('chapHint');
-const navbar = document.getElementById('navbar');
-const loader = document.getElementById('loader');
-const loaderFill = document.getElementById('loader-fill');
-const loaderStatus = document.getElementById('loader-status');
-let duree = 10, pret = false, chargeurCache = false;
-function cacherLoader(){
-  if(chargeurCache) return; chargeurCache = true;
-  loader.classList.add('hidden');
-}
-video.addEventListener('loadedmetadata', ()=>{ if(video.duration) duree = video.duration; });
-video.addEventListener('canplaythrough', ()=>{ pret = true; cacherLoader(); });
-video.addEventListener('progress', ()=>{
-  try{
-    if(video.buffered.length && video.duration){
-      const pct = Math.min(100, video.buffered.end(video.buffered.length-1) / video.duration * 100);
-      loaderFill.style.width = pct + '%';
-      loaderStatus.textContent = 'Chargement de la soirée… ' + Math.round(pct) + '%';
-      if(pct > 60) pret = true;
-    }
-  }catch(e){}
+/* ===== PRELOADER ===== */
+(function(){
+  let p = 0;
+  const fill = document.getElementById('lFill'), pct = document.getElementById('lPct');
+  const t = setInterval(()=>{
+    p = Math.min(100, p + Math.random()*22);
+    fill.style.width = p + '%'; pct.textContent = Math.round(p) + '%';
+    if(p >= 100){ clearInterval(t); setTimeout(()=>document.getElementById('loader').classList.add('fini'), 350); }
+  }, 160);
+})();
+/* ===== NAV ===== */
+const nav = document.getElementById('nav');
+addEventListener('scroll', ()=>nav.classList.toggle('scrolled', scrollY > innerHeight - 120), {passive:true});
+/* ===== HERO DIAPORAMA ===== */
+const slides = document.querySelectorAll('.hero .slide');
+const dotsBox = document.getElementById('heroDots');
+let cur = 0, timer;
+slides.forEach((_, i)=>{
+  const b = document.createElement('button');
+  b.setAttribute('aria-label', 'Photo ' + (i+1));
+  if(i === 0) b.classList.add('actif');
+  b.onclick = ()=>montrer(i, true);
+  dotsBox.appendChild(b);
 });
-video.addEventListener('canplay', ()=>{ pret = true; });
-setTimeout(cacherLoader, 12000); /* filet de sécurité */
-try{ video.load(); video.pause(); }catch(e){}
-let cible = 0, courant = -1;
-function progressChapitre(){
-  const r = chapitre.getBoundingClientRect();
-  const total = r.height - window.innerHeight;
-  if(total <= 0) return 0;
-  return Math.min(Math.max(-r.top / total, 0), 1);
+const dots = dotsBox.querySelectorAll('button');
+function montrer(i, manuel){
+  slides[cur].classList.remove('actif'); dots[cur].classList.remove('actif');
+  cur = (i + slides.length) % slides.length;
+  slides[cur].classList.add('actif'); dots[cur].classList.add('actif');
+  if(manuel){ clearInterval(timer); auto(); }
 }
-function tick(){
-  const p = progressChapitre();
-  cible = p * duree;
-  if(courant < 0){ courant = cible; }
-  const diff = cible - courant;
-  /* Seek seulement si la vidéo est prête : pas de saccades, pas de blocage */
-  if(pret && video.readyState >= 2 && Math.abs(diff) > 0.03){
-    courant += diff * 0.12;
-    try{ video.currentTime = courant; }catch(e){}
-  } else if(!pret){
-    courant = cible;
-  }
-  beats.forEach(b => {
-    const d = parseFloat(b.dataset.debut), f = parseFloat(b.dataset.fin);
-    b.style.opacity = (p >= d && p <= f) ? 1 : 0;
-  });
-  /* Rien que la vidéo pendant le chapitre : la nav n'apparaît qu'après */
-  if(p >= 0.985){ navbar.classList.add('visible'); } else { navbar.classList.remove('visible'); }
-  hint.style.opacity = (p > 0.005 && p < 0.97) ? 1 : 0;
-  requestAnimationFrame(tick);
+function auto(){ timer = setInterval(()=>montrer(cur + 1), 6000); }
+auto();
+/* ===== COMPTEURS ===== */
+const obs2 = new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting) return; obs2.unobserve(e.target);
+  const el = e.target, cible = +el.dataset.cible, div = +(el.dataset.div || 1);
+  const t0 = performance.now();
+  (function pas(t){
+    const k = Math.min(1, (t - t0) / 1400);
+    const v = cible * (1 - Math.pow(1 - k, 3)) / div;
+    el.textContent = (div > 1 ? v.toFixed(1).replace('.', ',') : Math.round(v).toLocaleString('fr-FR').replace(/,/g, ' '));
+    if(k < 1) requestAnimationFrame(pas);
+  })(t0);
+}), {threshold:.5});
+document.querySelectorAll('.compte').forEach(el=>obs2.observe(el));
+/* ===== SIGNATURES ===== */
+const SIGNATS = [
+  {nom:"Poulet Braisé & Alloco", cat:"Best-seller", prix:"3 500 FCFA + boisson", img:"https://images.unsplash.com/photo-1598103442097-8b74394b95c6?q=80&w=800&auto=format&fit=crop"},
+  {nom:"Ndolé aux crevettes", cat:"Crémeux", prix:"4 000 FCFA + boisson", img:"https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop"},
+  {nom:"Eru & Water Fufu", cat:"Tradition", prix:"3 000 FCFA + boisson", img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800&auto=format&fit=crop"},
+  {nom:"Soya de bœuf", cat:"Au feu", prix:"2 500 FCFA + boisson", img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop"},
+];
+document.getElementById('signRow').innerHTML = SIGNATS.map(s=>`
+  <div class="signat"><img src="${s.img}" alt="${s.nom}" loading="lazy" onerror="this.remove()">
+  <div class="legende"><div class="cat">${s.cat}</div><h3>${s.nom}</h3><div class="prix">${s.prix}</div></div></div>`).join('');
+/* ===== AVIS SLIDER ===== */
+const avis = document.querySelectorAll('.slide-avis');
+const avisDots = document.getElementById('sliderDots');
+let ai = 0, atimer;
+avis.forEach((_, i)=>{
+  const b = document.createElement('button');
+  b.setAttribute('aria-label', 'Avis ' + (i+1));
+  if(i === 0) b.classList.add('actif');
+  b.onclick = ()=>avisGo(i, true);
+  avisDots.appendChild(b);
+});
+const adots = avisDots.querySelectorAll('button');
+function avisGo(i, manuel){
+  avis[ai].classList.remove('actif'); adots[ai].classList.remove('actif');
+  ai = (i + avis.length) % avis.length;
+  avis[ai].classList.add('actif'); adots[ai].classList.add('actif');
+  if(manuel){ clearInterval(atimer); avisAuto(); }
 }
-requestAnimationFrame(tick);
-document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
-  const t = document.querySelector(a.getAttribute('href'));
-  if(t){ e.preventDefault(); defilerVers(t); }
-}));
-const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } }), {threshold:.12});
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+function avisAuto(){ atimer = setInterval(()=>avisGo(ai + 1), 5000); }
+avisAuto();
+/* ===== FAQ ===== */
+function toggleFaq(btn){
+  const item = btn.parentElement, rep = item.querySelector('.faq-r');
+  const ouvert = item.classList.contains('ouvert');
+  document.querySelectorAll('.faq-item.ouvert').forEach(o=>{ o.classList.remove('ouvert'); o.querySelector('.faq-r').style.maxHeight = null; });
+  if(!ouvert){ item.classList.add('ouvert'); rep.style.maxHeight = rep.scrollHeight + 'px'; }
+}
+/* ===== FORMULE (miroir seed.sql) ===== */
+const MENU = [
+  {id:"p1", nom:"Poulet Braisé & Alloco", cat:"plat", prix:3500, desc:"Poulet braisé, alloco, piment doux", img:"https://images.unsplash.com/photo-1598103442097-8b74394b95c6?q=80&w=600&auto=format&fit=crop", dispo:true},
+  {id:"p2", nom:"Ndolé aux crevettes", cat:"plat", prix:4000, desc:"Ndolé, crevettes, plantains mûrs", img:"https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=600&auto=format&fit=crop", dispo:true},
+  {id:"p3", nom:"Eru & Water Fufu", cat:"plat", prix:3000, desc:"Eru, water fufu, peau de bœuf", img:"https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=600&auto=format&fit=crop", dispo:true},
+  {id:"p4", nom:"Soya de bœuf + bâton", cat:"plat", prix:2500, desc:"Soya grillé, bâton de manioc", img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=600&auto=format&fit=crop", dispo:true},
+  {id:"b1", nom:"Eau Minérale 1.5L", cat:"eau", prix:500, desc:"Eau minérale naturelle", img:"https://images.unsplash.com/photo-1523362628745-0c100150b504?q=80&w=600&auto=format&fit=crop", dispo:true},
+  {id:"b2", nom:"Eau Minérale 500ml", cat:"eau", prix:300, desc:"Format table", img:"https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=600&auto=format&fit=crop", dispo:true},
+  {id:"b3", nom:"Bière Pils 65cl", cat:"biere", prix:1000, desc:"Servie bien fraîche", img:"https://images.unsplash.com/photo-1608270586620-248524c67de9?q=80&w=600&auto=format&fit=crop", dispo:true},
+  {id:"b4", nom:"Bière Lager 33cl", cat:"biere", prix:700, desc:"Format canette", img:"https://images.unsplash.com/photo-1567696911980-2eed69a46042?q=80&w=600&auto=format&fit=crop", dispo:false},
+  {id:"b5", nom:"Coca-Cola 33cl", cat:"soda", prix:600, desc:"Soda servi frais", img:"https://images.unsplash.com/photo-1554866585-cd94860890b7?q=80&w=600&auto=format&fit=crop", dispo:true},
+  {id:"b6", nom:"Jus de Bissap maison", cat:"soda", prix:800, desc:"Jus naturel maison", img:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?q=80&w=600&auto=format&fit=crop", dispo:true},
+];
+const NUMERO_RESTO = "699 00 00 00";
+let plat = null, boisson = null, filtreActuel = "tout";
+const fmt = n => n.toLocaleString("fr-FR").replace(/,/g," ") + " FCFA";
+const $ = id => document.getElementById(id);
+function rendreMenu(){
+  const liste = MENU.filter(a => filtreActuel==="tout" || a.cat===filtreActuel);
+  $("grilleMenu").innerHTML = liste.map(a=>{
+    const estPlat = a.cat === "plat";
+    const choisi = (estPlat ? plat : boisson)?.id === a.id;
+    return `<div class="carte ${a.dispo?"":"epuisee"}">
+      <div class="photo"><img src="${a.img}" alt="${a.nom}" loading="lazy" onerror="this.remove()">
+      ${a.dispo?"":'<span class="rupture">Rupture de stock</span>'}<span class="prix">${fmt(a.prix)}</span></div>
+      <div class="corps"><div class="cat">${a.cat}</div><h3>${a.nom}</h3><p>${a.desc}</p>
+      <button class="${choisi?"btn-choisi":"btn-choisir"}" ${a.dispo?"":"disabled"} onclick="choisir('${a.id}')">
+      ${a.dispo ? (choisi ? "✓ Choisi" : "Choisir " + (estPlat?"ce plat":"cette boisson")) : "Indisponible"}</button></div></div>`;
+  }).join("");
+}
+function filtrer(f, btn){
+  filtreActuel = f;
+  document.querySelectorAll(".filtre").forEach(b=>b.classList.remove("actif"));
+  btn.classList.add("actif"); rendreMenu();
+}
+function choisir(id){
+  const a = MENU.find(x=>x.id===id);
+  if(!a || !a.dispo) return;
+  if(a.cat==="plat"){ plat = a; toast("Plat : " + a.nom); }
+  else { boisson = a; toast("Boisson : " + a.nom); }
+  rendreMenu(); majBarre();
+}
+function majBarre(){
+  const n = (plat?1:0)+(boisson?1:0);
+  $("panierCount").textContent = n;
+  const barre = $("barreFormule");
+  if(n===0){ barre.classList.remove("visible"); return; }
+  barre.classList.add("visible");
+  $("barreChoix").innerHTML = `🍽 <b>${plat?plat.nom:"— choisis ton plat —"}</b><br>🥤 <b>${boisson?boisson.nom:"— choisis ta boisson —"}</b>`;
+  $("barreTotal").textContent = (plat&&boisson) ? fmt(plat.prix+boisson.prix) : "…";
+}
+function ouvrirPanier(){
+  if(!plat || !boisson){ toast("Choisis d'abord 1 plat + 1 boisson"); $("formule").scrollIntoView({behavior:"smooth"}); return; }
+  const total = plat.prix + boisson.prix;
+  $("modalContenu").innerHTML = `
+    <button class="fermer" onclick="fermerModal()">✕</button>
+    <h3>Ton plateau</h3><div class="sous">Vérifie, puis on passe au paiement.</div>
+    <div class="recap">🍽 <b>${plat.nom}</b> — ${fmt(plat.prix)}<br>🥤 <b>${boisson.nom}</b> — ${fmt(boisson.prix)}<br><br>Total : <b>${fmt(total)}</b></div>
+    <div class="champ"><label>Ton nom</label><input id="fNom" placeholder="Ex : Awa"></div>
+    <div class="champ"><label>Téléphone</label><input id="fTel" placeholder="Ex : 699 11 22 33"></div>
+    <div class="champ"><label>Type de commande</label>
+      <select id="fType" onchange="toggleType()"><option value="sur_place">Sur place</option><option value="emporter">À emporter</option><option value="livraison">Livraison</option></select></div>
+    <div class="champ" id="chTable"><label>N° de table</label><input id="fTable" type="number" min="1" placeholder="Ex : 5"></div>
+    <div class="champ" id="chAdr" style="display:none"><label>Adresse de livraison</label><input id="fAdr" placeholder="Rue, quartier, ville"></div>
+    <button class="btn btn-terre" style="width:100%;justify-content:center" onclick="allerPaiement()">Continuer vers le paiement →</button>`;
+  $("modalFond").classList.add("ouvert");
+}
+function toggleType(){
+  const t = $("fType").value;
+  $("chTable").style.display = t==="sur_place" ? "block" : "none";
+  $("chAdr").style.display = t==="livraison" ? "block" : "none";
+}
+function infos(){
+  const nom = $("fNom").value.trim(), tel = $("fTel").value.trim(), type = $("fType").value;
+  const table = $("fTable")?.value, adr = $("fAdr")?.value.trim();
+  if(nom.length < 2){ toast("Indique ton nom"); return null; }
+  if(tel.replace(/\D/g,"").length < 9){ toast("Numéro de téléphone incomplet"); return null; }
+  if(type==="sur_place" && !table){ toast("Indique ton N° de table"); return null; }
+  if(type==="livraison" && (!adr || adr.length < 5)){ toast("Indique ton adresse"); return null; }
+  return {nom, tel, type, table, adr};
+}
+function allerPaiement(){
+  if(!infos()) return;
+  const total = plat.prix + boisson.prix;
+  $("modalContenu").innerHTML = `
+    <button class="fermer" onclick="fermerModal()">✕</button>
+    <h3>Paiement Mobile Money</h3><div class="sous">Comme d'habitude, avec ton téléphone.</div>
+    <div class="recap">1️⃣ Envoie <b>${fmt(total)}</b> au <b>${NUMERO_RESTO}</b> (MTN / Orange)<br>2️⃣ Recopie ici la <b>référence du SMS</b> reçu</div>
+    <div class="champ"><label>Référence SMS (ex : MP-8X4K2Q)</label><input id="fRef" placeholder="MP-......"></div>
+    <button class="btn btn-terre" style="width:100%;justify-content:center" onclick="confirmerPaiement()">Confirmer mon paiement</button>
+    <button class="btn btn-clair" style="width:100%;justify-content:center;margin-top:10px;color:var(--vert);border-color:rgba(28,58,42,.25)" onclick="ouvrirPanier()">← Retour</button>`;
+}
+function confirmerPaiement(){
+  const ref = $("fRef").value.trim();
+  if(ref.length < 3){ toast("Tape la référence du SMS MoMo"); return; }
+  const code = "CMD-" + Math.floor(104 + Math.random()*800);
+  const total = plat.prix + boisson.prix;
+  $("modalContenu").innerHTML = `
+    <div class="code-cmd"><span style="font-size:.85rem;opacity:.8">Commande envoyée en cuisine</span><b>${code}</b><span style="font-size:.85rem;opacity:.8">${fmt(total)} · Réf ${ref}</span></div>
+    <div class="timeline" id="timeline">
+      <div class="step" data-s="0"><div class="rond">1</div><div><b>Vérification du paiement</b><br><small>Le gérant contrôle ton transfert…</small></div></div>
+      <div class="step" data-s="1"><div class="rond">2</div><div><b>En cuisine</b><br><small>Ton plat est en préparation…</small></div></div>
+      <div class="step" data-s="2"><div class="rond">3</div><div><b>Prête !</b><br><small>Viens récupérer ou fais-toi livrer.</small></div></div>
+    </div>
+    <button class="btn btn-vert" style="width:100%;justify-content:center" onclick="fermerModal();resetFormule()">Parfait, merci !</button>`;
+  const steps = document.querySelectorAll("#timeline .step");
+  steps[0].classList.add("actif");
+  setTimeout(()=>{ steps[0].classList.replace("actif","termine"); steps[0].querySelector(".rond").textContent="✓"; steps[1].classList.add("actif"); toast("Paiement validé, en cuisine !"); }, 3000);
+  setTimeout(()=>{ steps[1].classList.replace("actif","termine"); steps[1].querySelector(".rond").textContent="✓"; steps[2].classList.add("actif"); toast("Ta commande est prête !"); }, 6500);
+}
+function resetFormule(){ plat=null; boisson=null; rendreMenu(); majBarre(); }
+function fermerModal(){ $("modalFond").classList.remove("ouvert"); }
+$("modalFond").addEventListener("click", e=>{ if(e.target.id==="modalFond") fermerModal(); });
+let toastTimer;
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("show"), 2600);
+}
+/* ===== DIVERS ===== */
+const duplique = document.getElementById('defile').innerHTML;
+document.getElementById('defile').innerHTML += duplique;
+const obs = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("visible"); obs.unobserve(e.target);} }),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>obs.observe(el));
+rendreMenu(); majBarre();
 </script>
 </body>
 </html>
