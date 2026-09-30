@@ -143,17 +143,51 @@ footer{background:var(--vert-fonce);color:#fff;padding:60px 0 28px;margin-top:90
 
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
 <script>
+/* Lenis = bonus. Sans lui (hors-ligne), scroll natif + tout marche quand même. */
+let lenis = null;
+try {
+  if (window.Lenis) {
+    lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+    const rafL = (t)=>{ lenis.raf(t); requestAnimationFrame(rafL); };
+    requestAnimationFrame(rafL);
+  }
+} catch(e){ lenis = null; }
+function defilerVers(el){
+  if(lenis){ lenis.scrollTo(el, {offset:-70}); }
+  else { el.scrollIntoView({behavior:'smooth'}); }
+}
 const video = document.getElementById('v');
 const chapitre = document.querySelector('.chapitre');
 const beats = document.querySelectorAll('.beat');
 const hint = document.getElementById('chapHint');
-let duree = 10;
+const loader = document.getElementById('loader');
+const loaderFill = document.getElementById('loader-fill');
+const loaderStatus = document.getElementById('loader-status');
+let duree = 10, pret = false, chargeurCache = false;
+function cacherLoader(){
+  if(chargeurCache) return; chargeurCache = true;
+  loader.classList.add('hidden');
+}
 video.addEventListener('loadedmetadata', ()=>{ if(video.duration) duree = video.duration; });
-video.load();
+video.addEventListener('canplaythrough', ()=>{ pret = true; cacherLoader(); });
+video.addEventListener('progress', ()=>{
+  try{
+    if(video.buffered.length && video.duration){
+      const pct = Math.min(100, video.buffered.end(video.buffered.length-1) / video.duration * 100);
+      loaderFill.style.width = pct + '%';
+      loaderStatus.textContent = 'Chargement de la soirée… ' + Math.round(pct) + '%';
+      if(pct > 60) pret = true;
+    }
+  }catch(e){}
+});
+video.addEventListener('canplay', ()=>{ pret = true; });
+setTimeout(cacherLoader, 12000); /* filet de sécurité */
+try{ video.load(); video.pause(); }catch(e){}
 let cible = 0, courant = -1;
 function progressChapitre(){
   const r = chapitre.getBoundingClientRect();
   const total = r.height - window.innerHeight;
+  if(total <= 0) return 0;
   return Math.min(Math.max(-r.top / total, 0), 1);
 }
 function tick(){
@@ -161,9 +195,12 @@ function tick(){
   cible = p * duree;
   if(courant < 0){ courant = cible; }
   const diff = cible - courant;
-  if(Math.abs(diff) > 1/60){
-    courant += diff * 0.18;
+  /* Seek seulement si la vidéo est prête : pas de saccades, pas de blocage */
+  if(pret && video.readyState >= 2 && Math.abs(diff) > 0.03){
+    courant += diff * 0.12;
     try{ video.currentTime = courant; }catch(e){}
+  } else if(!pret){
+    courant = cible;
   }
   beats.forEach(b => {
     const d = parseFloat(b.dataset.debut), f = parseFloat(b.dataset.fin);
@@ -173,12 +210,9 @@ function tick(){
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
-const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
-function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
-requestAnimationFrame(raf);
 document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
   const t = document.querySelector(a.getAttribute('href'));
-  if(t){ e.preventDefault(); lenis.scrollTo(t, {offset:-70}); }
+  if(t){ e.preventDefault(); defilerVers(t); }
 }));
 const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } }), {threshold:.12});
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
