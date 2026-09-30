@@ -44,6 +44,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(250,244,232,.
 .beat h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin-bottom:.8rem}
 .beat p{line-height:1.75;color:rgba(255,255,255,.82)}
 .chap-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.75);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;transition:opacity .3s}
+.titre-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 24px;pointer-events:none;transition:opacity .3s}
+.titre-overlay h1{font-family:'Fraunces',serif;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;color:#fff;line-height:1.02;text-shadow:0 6px 50px rgba(0,0,0,.6)}
+.titre-overlay h1 em{font-style:italic;color:#e9a13b}
+.titre-overlay p{margin-top:14px;color:rgba(255,255,255,.85);font-size:1.05rem;max-width:520px}
+.titre-overlay .scroll-hint{margin-top:26px;display:flex;align-items:center;gap:.8rem;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.titre-overlay .souris{width:24px;height:38px;border:2px solid rgba(255,255,255,.7);border-radius:14px;position:relative}
+.titre-overlay .souris::after{content:"";position:absolute;top:7px;left:50%;width:4px;height:8px;margin-left:-2px;border-radius:4px;background:#e9a13b;animation:roule 1.6s infinite}
+@keyframes roule{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(12px)}}
+.grille-avis{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.avis{background:#fff;border-radius:20px;padding:30px 28px;box-shadow:0 8px 30px rgba(18,38,25,.07)}
+.avis .etoiles{color:var(--ambre);letter-spacing:3px;margin-bottom:12px}
+.avis p{font-style:italic;line-height:1.7;font-size:.95rem}
+.avis .qui{margin-top:16px;font-weight:700;color:var(--vert)}
+.avis .qui span{display:block;font-weight:400;font-size:.82rem;opacity:.6}
+#avisite{background:var(--creme-2)}
+section.bloc{padding:90px 0}
 /* Sections normales */
 section.bloc{padding:90px 0}
 .titre{text-align:center;max-width:640px;margin:0 auto 50px}
@@ -87,16 +103,15 @@ footer{background:var(--vert-fonce);color:#fff;padding:60px 0 28px;margin-top:90
   </div>
 </div></nav>
 
-<header class="hero"><div class="wrap">
-  <h1>Le goût du jardin,<br><em>servi en 15 minutes.</em></h1>
-  <p class="lead">Formule <b>1 plat + 1 boisson</b>, paiement Mobile Money, suivi en direct jusqu'en cuisine. D'abord, vivez la soirée :</p>
-  <div class="hero-cta"><a href="#soiree" class="btn btn-terre">Voir la soirée ↓</a></div>
-</div></header>
-
-<!-- CHAPITRE SCROLL-VIDEO : une section, pas tout le site -->
+<!-- LA VIDÉO D'ABORD : plein écran dès l'arrivée -->
 <div class="chapitre" id="soiree"><div class="sticky">
   <video id="v" muted playsinline preload="auto" poster="./poster.jpg" src="./soiree-scrub.mp4"></video>
   <div class="voile"></div>
+  <div class="titre-overlay" id="titreOverlay">
+    <h1>Jardin <em>des Saveurs</em></h1>
+    <p>1 plat + 1 boisson · Paiement Mobile Money · Suivi en direct</p>
+    <div class="scroll-hint"><span class="souris"></span> Scrolle — la soirée commence</div>
+  </div>
   <div class="beat" data-debut="0.02" data-fin="0.34"><div class="carte">
     <span class="badge">La soirée · 1/3</span><h2>On s'installe entre amis</h2>
     <p>Lumière chaude, verres qui se lèvent, plats qui arrivent fumants. Au Jardin, le repas commence avant la première bouchée.</p>
@@ -131,6 +146,15 @@ footer{background:var(--vert-fonce);color:#fff;padding:60px 0 28px;margin-top:90
   <div class="sms">✅ Commande <b>CMD-104</b> validée ! En cuisine — 15 min.</div></div>
 </div></div></section>
 
+<section class="bloc" id="avisite"><div class="wrap">
+  <div class="titre reveal"><div class="num">Ils en parlent</div><h2>Le quartier a tranché</h2></div>
+  <div class="grille-avis">
+    <div class="avis reveal"><div class="etoiles">★★★★★</div><p>« Le Ndolé aux crevettes + Bissap, commandé à 12h40, prêt à 13h. Le suivi en direct c'est génial. »</p><div class="qui">Awa M.<span>Cliente · Akwa</span></div></div>
+    <div class="avis reveal"><div class="etoiles">★★★★★</div><p>« Paiement MoMo en 30 secondes, pas besoin de monnaie. La formule est parfaite pour le midi. »</p><div class="qui">Junior T.<span>Client · Deïdo</span></div></div>
+    <div class="avis reveal"><div class="etoiles">★★★★★</div><p>« Enfin un resto où on voit où en est sa commande. Le soya est une tuerie. »</p><div class="qui">Sandra K.<span>Cliente · Bonanjo</span></div></div>
+  </div>
+</div></section>
+
 <footer><div class="wrap">
   <div class="foot-grid">
     <div><a class="logo" href="#" style="color:#fff"><span class="logo-feuille">❦</span> Jardin des Saveurs</a>
@@ -160,6 +184,7 @@ const video = document.getElementById('v');
 const chapitre = document.querySelector('.chapitre');
 const beats = document.querySelectorAll('.beat');
 const hint = document.getElementById('chapHint');
+const overlay = document.getElementById('titreOverlay');
 const loader = document.getElementById('loader');
 const loaderFill = document.getElementById('loader-fill');
 const loaderStatus = document.getElementById('loader-status');
@@ -206,6 +231,8 @@ function tick(){
     const d = parseFloat(b.dataset.debut), f = parseFloat(b.dataset.fin);
     b.style.opacity = (p >= d && p <= f) ? 1 : 0;
   });
+  overlay.style.opacity = Math.max(0, 1 - p * 9);
+  overlay.style.pointerEvents = 'none';
   hint.style.opacity = (p > 0.02 && p < 0.97) ? 1 : 0;
   requestAnimationFrame(tick);
 }
