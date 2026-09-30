@@ -67,7 +67,18 @@ section.bloc{padding:90px 0}
 .titre h2{font-size:clamp(1.9rem,4vw,2.8rem);color:var(--vert);margin:12px 0 14px;font-weight:900}
 .titre p{opacity:.7;line-height:1.7}
 .cartes3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.carte3{background:#fff;border-radius:20px;padding:34px 30px;box-shadow:0 8px 30px rgba(18,38,25,.08)}
+.carte3{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 30px rgba(18,38,25,.08)}
+.carte3 .photo{height:190px;overflow:hidden;background:var(--creme-2)}
+.carte3 .photo img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.carte3:hover .photo img{transform:scale(1.06)}
+.carte3 .icone,.carte3 h3,.carte3 p,.carte3 .prix{margin-left:30px;margin-right:30px}
+.carte3 .icone{margin-top:22px}
+.carte3 .prix{margin-bottom:30px}
+.galerie{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.galerie div{border-radius:18px;overflow:hidden;height:230px;box-shadow:0 8px 26px rgba(18,38,25,.12)}
+.galerie img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.galerie div:hover img{transform:scale(1.07)}
+@media(max-width:860px){ .galerie{grid-template-columns:repeat(2,1fr)} }
 .carte3 .icone{font-size:2rem}
 .carte3 h3{color:var(--vert);font-size:1.25rem;margin:12px 0 8px}
 .carte3 p{font-size:.94rem;opacity:.7;line-height:1.65}
@@ -107,33 +118,16 @@ footer{background:var(--vert-fonce);color:#fff;padding:60px 0 28px;margin-top:90
 <div class="chapitre" id="soiree"><div class="sticky">
   <video id="v" muted playsinline preload="auto" poster="./poster.jpg" src="./soiree-scrub.mp4"></video>
   <div class="voile"></div>
-  <div class="titre-overlay" id="titreOverlay">
-    <h1>Jardin <em>des Saveurs</em></h1>
-    <p>1 plat + 1 boisson · Paiement Mobile Money · Suivi en direct</p>
-    <div class="scroll-hint"><span class="souris"></span> Scrolle — la soirée commence</div>
-  </div>
-  <div class="beat" data-debut="0.02" data-fin="0.34"><div class="carte">
-    <span class="badge">La soirée · 1/3</span><h2>On s'installe entre amis</h2>
-    <p>Lumière chaude, verres qui se lèvent, plats qui arrivent fumants. Au Jardin, le repas commence avant la première bouchée.</p>
-  </div></div>
-  <div class="beat droite" data-debut="0.36" data-fin="0.68"><div class="carte">
-    <span class="badge">La soirée · 2/3</span><h2>On trinque, on partage</h2>
-    <p>Bissap maison, bière fraîche ou jus du jour — chaque formule inclut ta boisson. Santé !</p>
-  </div></div>
-  <div class="beat" data-debut="0.70" data-fin="0.99"><div class="carte">
-    <span class="badge">La soirée · 3/3</span><h2>Et ça pourrait être toi</h2>
-    <p>Ta table t'attend. Compose ta formule en 1 minute, la cuisine est alertée à la seconde.</p>
-  </div></div>
-  <div class="chap-hint" id="chapHint">Scrolle — la soirée défile</div>
+  <div class="chap-hint" id="chapHint">Scrollez pour défiler</div>
 </div></div>
 
 <section class="bloc" id="formule"><div class="wrap">
   <div class="titre reveal"><div class="num">La formule</div><h2>1 plat + 1 boisson, toujours</h2>
   <p>Le total se calcule tout seul. Ruptures de stock signalées en direct.</p></div>
   <div class="cartes3">
-    <div class="carte3 reveal"><div class="icone">🍃</div><h3>Poulet Braisé & Alloco</h3><p>Le best-seller : poulet braisé, alloco doré, piment doux.</p><span class="prix">3 500 FCFA + boisson</span></div>
-    <div class="carte3 reveal"><div class="icone">🍤</div><h3>Ndolé aux crevettes</h3><p>Ndolé onctueux, crevettes, plantains mûrs.</p><span class="prix">4 000 FCFA + boisson</span></div>
-    <div class="carte3 reveal"><div class="icone">🔥</div><h3>Soya de bœuf + bâton</h3><p>Soya grillé au feu, bâton de manioc.</p><span class="prix">2 500 FCFA + boisson</span></div>
+    <div class="carte3 reveal"><div class="photo"><img src="./img-80.jpg" alt="Plat signature" loading="lazy"></div><div class="icone">🍃</div><h3>Poulet Braisé & Alloco</h3><p>Le best-seller : poulet braisé, alloco doré, piment doux.</p><span class="prix">3 500 FCFA + boisson</span></div>
+    <div class="carte3 reveal"><div class="photo"><img src="./img-150.jpg" alt="Ndolé aux crevettes" loading="lazy"></div><div class="icone">🍤</div><h3>Ndolé aux crevettes</h3><p>Ndolé onctueux, crevettes, plantains mûrs.</p><span class="prix">4 000 FCFA + boisson</span></div>
+    <div class="carte3 reveal"><div class="photo"><img src="./img-215.jpg" alt="Soya grillé" loading="lazy"></div><div class="icone">🔥</div><h3>Soya de bœuf + bâton</h3><p>Soya grillé au feu, bâton de manioc.</p><span class="prix">2 500 FCFA + boisson</span></div>
   </div>
   <div style="text-align:center;margin-top:36px"><a class="btn btn-terre" href="https://github.com/Fad-cod/restaurant/blob/main/vitrine/index.html" target="_blank" rel="noopener">Composer ma formule →</a></div>
 </div></section>
@@ -146,7 +140,18 @@ footer{background:var(--vert-fonce);color:#fff;padding:60px 0 28px;margin-top:90
   <div class="sms">✅ Commande <b>CMD-104</b> validée ! En cuisine — 15 min.</div></div>
 </div></div></section>
 
-<section class="bloc" id="avisite"><div class="wrap">
+<section class="bloc" id="galerie" style="padding-top:0"><div class="wrap">
+  <div class="titre reveal"><div class="num">En images</div><h2>Hier soir au Jardin</h2>
+  <p>Des images tirées de notre soirée — la vraie ambiance, sans filtre.</p></div>
+  <div class="galerie">
+    <div class="reveal"><img src="./img-15.jpg" alt="Apéritif entre amis" loading="lazy"></div>
+    <div class="reveal"><img src="./img-80.jpg" alt="Plats partagés" loading="lazy"></div>
+    <div class="reveal"><img src="./img-150.jpg" alt="Dîner animé" loading="lazy"></div>
+    <div class="reveal"><img src="./img-215.jpg" alt="Santé !" loading="lazy"></div>
+  </div>
+</div></section>
+
+<section class="bloc" id="avisite" style="padding-top:0"><div class="wrap">
   <div class="titre reveal"><div class="num">Ils en parlent</div><h2>Le quartier a tranché</h2></div>
   <div class="grille-avis">
     <div class="avis reveal"><div class="etoiles">★★★★★</div><p>« Le Ndolé aux crevettes + Bissap, commandé à 12h40, prêt à 13h. Le suivi en direct c'est génial. »</p><div class="qui">Awa M.<span>Cliente · Akwa</span></div></div>
@@ -184,7 +189,7 @@ const video = document.getElementById('v');
 const chapitre = document.querySelector('.chapitre');
 const beats = document.querySelectorAll('.beat');
 const hint = document.getElementById('chapHint');
-const overlay = document.getElementById('titreOverlay');
+const navbar = document.getElementById('navbar');
 const loader = document.getElementById('loader');
 const loaderFill = document.getElementById('loader-fill');
 const loaderStatus = document.getElementById('loader-status');
@@ -231,9 +236,9 @@ function tick(){
     const d = parseFloat(b.dataset.debut), f = parseFloat(b.dataset.fin);
     b.style.opacity = (p >= d && p <= f) ? 1 : 0;
   });
-  overlay.style.opacity = Math.max(0, 1 - p * 9);
-  overlay.style.pointerEvents = 'none';
-  hint.style.opacity = (p > 0.02 && p < 0.97) ? 1 : 0;
+  /* Rien que la vidéo pendant le chapitre : la nav n'apparaît qu'après */
+  if(p >= 0.985){ navbar.classList.add('visible'); } else { navbar.classList.remove('visible'); }
+  hint.style.opacity = (p > 0.005 && p < 0.97) ? 1 : 0;
   requestAnimationFrame(tick);
 }
 requestAnimationFrame(tick);
